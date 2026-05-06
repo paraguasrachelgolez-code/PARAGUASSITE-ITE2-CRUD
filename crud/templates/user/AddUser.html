@@ -1,0 +1,225 @@
+{% extends 'base.html' %} {% block content %}
+<div class="max-w-4xl bg-white p-8 rounded-lg mt-2 shadow-md">
+  {% if messages %}
+  <div class="mb-4">
+    {% for message in messages %}
+    <div
+      class="p-4 mb-2 text-sm text-red-800 rounded-lg bg-red-50"
+      role="alert"
+    >
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <form
+    method="POST"
+    action="{% url 'add_user' %}"
+    enctype="multipart/form-data"
+  >
+    {% csrf_token %}
+
+    <div class="mb-6">
+      <label class="block mb-2 text-sm font-medium text-gray-900"
+        >Profile Picture</label
+      >
+      <input
+        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+        type="file"
+        name="profile_picture"
+        accept="image/*"
+      />
+    </div>
+
+    <div class="grid gap-6 mb-6 md:grid-cols-2">
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Full Name</label
+        >
+        <input
+          type="text"
+          name="full_name"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="John Wick"
+          required
+        />
+      </div>
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Email</label
+        >
+        <input
+          type="email"
+          name="email"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="johnwick@gmail.com"
+        />
+      </div>
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Gender</label
+        >
+        <select
+          name="gender"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          required
+        >
+          <option value="">Select Gender</option>
+          {% for gender in genders %}
+          <option value="{{ gender.gender_id }}">{{ gender.gender }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Username</label
+        >
+        <input
+          type="text"
+          name="username"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="johnwick"
+          required
+        />
+      </div>
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Birth Date</label
+        >
+        <input
+          type="date"
+          name="birth_date"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          required
+        />
+      </div>
+
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Password</label
+        >
+        <div class="relative">
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10"
+            placeholder="••••••••••••"
+            required
+          />
+          <button
+            type="button"
+            onclick="togglePassword('password')"
+            class="absolute inset-y-0 end-0 flex items-center pe-3"
+          >
+            <svg
+              class="w-5 h-5 text-gray-500 hover:text-gray-900"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-width="2"
+                d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"
+              />
+              <path
+                stroke="currentColor"
+                stroke-width="2"
+                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Address</label
+        >
+        <input
+          type="text"
+          name="address"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="USA"
+          required
+        />
+      </div>
+
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Confirm Password</label
+        >
+        <div class="relative">
+          <input
+            type="password"
+            id="confirm_password"
+            name="confirm_password"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10"
+            placeholder="••••••••••••"
+            required
+          />
+          <button
+            type="button"
+            onclick="togglePassword('confirm_password')"
+            class="absolute inset-y-0 end-0 flex items-center pe-3"
+          >
+            <svg
+              class="w-5 h-5 text-gray-500 hover:text-gray-900"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-width="2"
+                d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"
+              />
+              <path
+                stroke="currentColor"
+                stroke-width="2"
+                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+<div>
+                <label class="block mb-2 text-sm font-medium text-gray-900">Contact Number</label>
+                <input type="text" name="contact_number" 
+                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                       placeholder="09123456789" 
+                       pattern="09[0-9]{9}" 
+                       maxlength="11" 
+                       minlength="11" 
+                       title="Must be an 11-digit PH number starting with 09" 
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                       required>
+            </div>
+
+    <div class="flex justify-end mt-4">
+      <button
+        type="submit"
+        class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-6 py-2.5 text-center"
+      >
+        Save User
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    if (input.type === "password") {
+      input.type = "text";
+    } else {
+      input.type = "password";
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md mt-6">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">Edit Gender</h2>
+
+    <form method="POST" action="{% url 'edit_gender' gender.gender_id %}">
+        {% csrf_token %}
+        <div class="mb-5">
+            <label class="block mb-2 text-sm font-medium text-gray-900">Gender Name</label>
+            <input type="text" name="gender" value="{{ gender.gender }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+        </div>
+        
+        <div class="flex justify-end gap-2 mt-4">
+            <a href="{% url 'gender_list' %}" class="text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 font-medium rounded-lg text-sm px-5 py-2.5">Cancel</a>
+            <button type="submit" class="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-sm px-6 py-2.5">Update Gender</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
