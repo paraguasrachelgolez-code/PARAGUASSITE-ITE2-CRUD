@@ -1,17 +1,13 @@
 {% extends 'base.html' %} {% block content %}
+<style>
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear {
+    display: none;
+  }
+</style>
+
 <div class="max-w-4xl bg-white p-8 rounded-lg mt-2 shadow-md">
-  {% if messages %}
-  <div class="mb-4">
-    {% for message in messages %}
-    <div
-      class="p-4 mb-2 text-sm text-red-800 rounded-lg bg-red-50"
-      role="alert"
-    >
-      {{ message }}
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
+
 
   <form
     method="POST"
@@ -20,16 +16,30 @@
   >
     {% csrf_token %}
 
-    <div class="mb-6">
-      <label class="block mb-2 text-sm font-medium text-gray-900"
-        >Profile Picture</label
+    <div class="mb-6 flex items-center gap-4">
+      <div
+        class="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 overflow-hidden border border-gray-300 shrink-0"
       >
-      <input
-        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-        type="file"
-        name="profile_picture"
-        accept="image/*"
-      />
+        <span id="previewText" class="text-xs font-medium">Avatar</span>
+        <img
+          id="profilePreview"
+          class="w-full h-full object-cover hidden"
+          alt="Preview"
+        />
+      </div>
+
+      <div class="w-full">
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Profile Picture</label
+        >
+        <input
+          class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+          type="file"
+          name="profile_picture"
+          accept="image/*"
+          onchange="previewImage(event)"
+        />
+      </div>
     </div>
 
     <div class="grid gap-6 mb-6 md:grid-cols-2">
@@ -159,6 +169,7 @@
             name="confirm_password"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10"
             placeholder="••••••••••••"
+            onkeyup="checkPasswordMatch()"
             required
           />
           <button
@@ -188,18 +199,24 @@
         </div>
       </div>
 
-<div>
-                <label class="block mb-2 text-sm font-medium text-gray-900">Contact Number</label>
-                <input type="text" name="contact_number" 
-                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
-                       placeholder="09123456789" 
-                       pattern="09[0-9]{9}" 
-                       maxlength="11" 
-                       minlength="11" 
-                       title="Must be an 11-digit PH number starting with 09" 
-                       oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
-                       required>
-            </div>
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900"
+          >Contact Number</label
+        >
+        <input
+          type="text"
+          name="contact_number"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="09123456789"
+          pattern="09[0-9]{9}"
+          maxlength="11"
+          minlength="11"
+          title="Must be an 11-digit PH number starting with 09"
+          oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+          required
+        />
+      </div>
+    </div>
 
     <div class="flex justify-end mt-4">
       <button
@@ -220,6 +237,46 @@
     } else {
       input.type = "password";
     }
+  }
+
+  function previewImage(event) {
+    const input = event.target;
+    const previewImg = document.getElementById("profilePreview");
+    const previewText = document.getElementById("previewText");
+
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        previewImg.src = e.target.result;
+        previewImg.classList.remove("hidden");
+        previewText.classList.add("hidden");
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    } else {
+      previewImg.src = "";
+      previewImg.classList.add("hidden");
+      previewText.classList.remove("hidden");
+    }
+    // 3. Script para harangin ang form kung di match ang password
+    function checkPasswordMatch() {
+      var password = document.getElementById("password");
+      var confirm_password = document.getElementById("confirm_password");
+
+      if (password.value !== confirm_password.value) {
+        // Lalabas ang default browser warning pop-up at HINDI magsu-submit
+        confirm_password.setCustomValidity("Passwords do not match!");
+      } else {
+        // Kung match na, tatanggalin ang error
+        confirm_password.setCustomValidity("");
+      }
+    }
+
+    // Idagdag din sa main password para nag-uupdate pag pinalitan
+    document
+      .getElementById("password")
+      .addEventListener("keyup", checkPasswordMatch);
   }
 </script>
 {% endblock %}
